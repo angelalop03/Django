@@ -2,9 +2,12 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 
+
 from users.models import User
 from .models import FavoriteArtist, FavoriteTrack
 from .serializer import FavoriteArtistSerializer, FavoriteTrackSerializer
+from .services.spotify import get_spotify_data_directly
+from api_server import settings
 
 
 class FavoriteArtistAPIView(APIView):
@@ -115,3 +118,61 @@ class FavoriteTrackAPIView(APIView):
         if deleted == 0:
             return Response({"detail": "No favorite track to delete."}, status=status.HTTP_404_NOT_FOUND)
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+#API
+
+class FavoriteArtistSpotifyAPIView(APIView):
+    """
+    GET /api-music/users/<user_id>/artist/spotify/
+    """
+
+    def get(self, request, user_id: int):
+        try:
+            fav = FavoriteArtist.objects.get(user_id=user_id)
+        except FavoriteArtist.DoesNotExist:
+            return Response(
+                {"detail": "No favorite artist for this user."},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        try:
+            data = get_spotify_data_directly(
+                name=fav.name,
+                type_="artist",
+                client_id=settings.SPOTIFY_CLIENT_ID,
+                client_secret=settings.SPOTIFY_CLIENT_SECRET
+            )
+            return Response(data, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response(
+                {"detail": "Spotify request failed", "error": str(e)},
+                status=status.HTTP_502_BAD_GATEWAY
+            )
+
+class FavoriteTrackSpotifyAPIView(APIView):
+    """
+    GET /api-music/users/<user_id>/track/spotify/
+    """
+
+    def get(self, request, user_id: int):
+        try:
+            fav = FavoriteTrack.objects.get(user_id=user_id)
+        except FavoriteTrack.DoesNotExist:
+            return Response(
+                {"detail": "No favorite track for this user."},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        try:
+            data = get_spotify_data_directly(
+                name=fav.title,
+                type_="track",
+                client_id=settings.SPOTIFY_CLIENT_ID,
+                client_secret=settings.SPOTIFY_CLIENT_SECRET
+            )
+            return Response(data, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response(
+                {"detail": "Spotify request failed", "error": str(e)},
+                status=status.HTTP_502_BAD_GATEWAY
+            )

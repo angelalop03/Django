@@ -117,3 +117,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+
+#Spotify API credentials
+SPOTIFY_CLIENT_ID= '06bad71a74634406bffce9aea3c0bb41'
+SPOTIFY_CLIENT_SECRET='1baea068e5a0466489be4b36a9d916ac'
