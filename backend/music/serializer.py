@@ -12,5 +12,5 @@ class FavoriteArtistSerializer(serializers.ModelSerializer):
 class FavoriteTrackSerializer(serializers.ModelSerializer):
     class Meta:
         model = FavoriteTrack
-        fields = ["id", "user", "title", "spotify_id"]
+        fields = ["id", "user", "title"]
         read_only_fields = ["id"]
