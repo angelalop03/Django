@@ -20,6 +20,32 @@ El proyecto se ha desarrollado siguiendo los contenidos vistos en clase, poniend
 - Requests
 - Postman
 
+## Inicialización del proyecto
+
+El proyecto se inicializó creando un entorno virtual para aislar las dependencias y utilizando Django para generar la estructura base de la aplicación.
+
+#### Creación del entorno virtual
+
+- python -m venv venv
+- venv\Scripts\activate      
+
+#### Instalación de dependencias
+- pip install django
+- pip install djangorestframework
+- pip install requests
+
+Las dependencias utilizadas se recogen posteriormente en el archivo requirements.txt.
+
+#### Creación del proyecto y aplicaciones
+- django-admin startproject api_server
+- python manage.py startapp users
+- python manage.py startapp music
+
+#### Migraciones 
+- python manage.py makemigrations
+- python manage.py migrate
+
+
 ## Arquitectura y organización del proyecto
 
 El proyecto se ha estructurado siguiendo la arquitectura estándar de Django, separando responsabilidades en distintas aplicaciones.
