@@ -1,4 +1,5 @@
 from django.db import models
+from users.models import User
 
 
 class FavoriteArtist(models.Model):
@@ -12,3 +13,4 @@ class FavoriteTrack(models.Model):
 
     class Meta:
         ordering = ["-id"]
+
